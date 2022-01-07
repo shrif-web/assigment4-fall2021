@@ -33,21 +33,21 @@
             "name": "vehicle_code",
             "in": "query",
             "required": false,
-            "type": "string",
+            "type": "number",
             "format": "int64"
           },
           {
             "name": "start_date_unix",
             "in": "query",
             "required": false,
-            "type": "string",
+            "type": "number",
             "format": "int64"
           },
           {
             "name": "end_date_unix",
             "in": "query",
             "required": false,
-            "type": "string",
+            "type": "number",
             "format": "int64"
           }
         ],
@@ -172,7 +172,7 @@
       "type": "object",
       "properties": {
         "vehicle_code": {
-          "type": "string",
+          "type": "number",
           "format": "int64"
         },
         "type": {
@@ -188,7 +188,7 @@
       "type": "object",
       "properties": {
         "driving_time": {
-          "type": "string"
+          "type": "number"
         },
         "covered_distance_km": {
           "type": "number",
@@ -277,11 +277,11 @@
       "type": "object",
       "properties": {
         "code": {
-          "type": "string",
+          "type": "number",
           "format": "int64"
         },
         "speed": {
-          "type": "string",
+          "type": "number",
           "format": "int64"
         },
         "location": {

@@ -21,7 +21,8 @@ const (
 type VehicleLog struct {
 	Code uint64 `json:"code"`
 	Speed uint32 `json:"speed"`
-	DateTime time.Time `json:"date_time"`
+	DateTime time.Time `json:"-"`
+	DateTimeUnix int64 `json:"date_time_unix"`
 	Latitude float32 `json:"latitude"`
 	Longitude float32 `json:"longitude"`
 	Temperature float32 `json:"temperature"`
