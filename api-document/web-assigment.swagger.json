@@ -1,0 +1,305 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "services/web-assigment.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/fraud/report": {
+      "get": {
+        "operationId": "WebDev_GetReport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/webDevGetReportResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "vehicle_code",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "start_date_unix",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "end_date_unix",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "WebDev"
+        ]
+      }
+    },
+    "/api/fraud/rules": {
+      "get": {
+        "operationId": "WebDev_GetRules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/webDevGetRulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "tags": [
+          "WebDev"
+        ]
+      },
+      "put": {
+        "operationId": "WebDev_UpdateRules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/webDevUpdateRulesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WebDev"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "runtimeStreamError": {
+      "type": "object",
+      "properties": {
+        "grpc_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "http_code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "http_status": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "webDevFraudDetectedEvent": {
+      "type": "object",
+      "properties": {
+        "vehicle_code": {
+          "type": "string",
+          "format": "int64"
+        },
+        "type": {
+          "$ref": "#/definitions/webDevRuleType"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "webDevGetReportResponse": {
+      "type": "object",
+      "properties": {
+        "driving_time": {
+          "type": "string"
+        },
+        "covered_distance_km": {
+          "type": "number",
+          "format": "float"
+        },
+        "frauds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/webDevFraudDetectedEvent"
+          }
+        }
+      }
+    },
+    "webDevGetRulesResponse": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "$ref": "#/definitions/webDevRules"
+        }
+      }
+    },
+    "webDevLocation": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "webDevMonitoringLogStreamResponse": {
+      "type": "object",
+      "properties": {
+        "vehicle_log": {
+          "$ref": "#/definitions/webDevVehicleLog"
+        }
+      }
+    },
+    "webDevRuleType": {
+      "type": "string",
+      "enum": [
+        "Non",
+        "Speed",
+        "Temperature"
+      ],
+      "default": "Non"
+    },
+    "webDevRules": {
+      "type": "object",
+      "properties": {
+        "temperature_rule": {
+          "$ref": "#/definitions/webDevTemperatureRule"
+        },
+        "max_speed": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "webDevTemperatureRule": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "max": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "webDevUpdateRulesRequest": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "$ref": "#/definitions/webDevRules"
+        }
+      }
+    },
+    "webDevVehicleLog": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "format": "int64"
+        },
+        "speed": {
+          "type": "string",
+          "format": "int64"
+        },
+        "location": {
+          "$ref": "#/definitions/webDevLocation"
+        },
+        "is_off": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "temperature": {
+          "type": "number",
+          "format": "float"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

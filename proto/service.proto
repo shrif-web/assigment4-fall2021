@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package webDev;
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/sharif-web/assignment4-fall2021/proto/build";
+
+service WebDev {
+
+  rpc Monitoring (google.protobuf.Empty) returns (stream MonitoringLogStreamResponse) {
+  }
+
+  rpc GetRules (google.protobuf.Empty) returns (GetRulesResponse) {
+    option (google.api.http) = {
+      get: "/api/fraud/rules"
+    };
+  }
+
+
+  rpc UpdateRules (UpdateRulesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/api/fraud/rules"
+      body: "*"
+    };
+  }
+
+  rpc GetReport (GetReportRequest) returns (GetReportResponse) {
+    option (google.api.http) = {
+      get: "/api/fraud/report"
+    };
+  }
+}
+
+message VehicleLog {
+  int64 code = 1;
+  int64 speed = 2;
+  Location location = 3 ;
+  bool is_off = 4;
+  float temperature = 5;
+  google.protobuf.Timestamp time = 6 ;
+}
+
+message Location {
+  float latitude = 1;
+  float longitude = 2;
+}
+
+
+message GetReportRequest {
+  int64 vehicle_code = 1 ;
+  int64 start_date_unix = 2;
+  int64 end_date_unix = 3;
+}
+
+message GetReportResponse {
+  google.protobuf.Duration driving_time = 1;
+  float covered_distance_km = 2;
+  repeated FraudDetectedEvent frauds = 3;
+}
+
+
+message TemperatureRule {
+  int32 min = 1 ;
+  int32 max = 2;
+}
+
+message GetRulesResponse {
+  Rules rules = 1;
+}
+
+message Rules {
+  TemperatureRule temperature_rule = 1;
+  uint32 max_speed = 2;
+}
+
+message UpdateRulesRequest {
+  Rules rules = 1;
+}
+
+message MonitoringLogStreamResponse {
+  VehicleLog vehicle_log = 1 ;
+}
+
+message FraudDetectedEvent {
+  int64 vehicle_code = 1;
+  RuleType type = 2;
+  google.protobuf.Timestamp time = 6 ;
+}
+
+enum RuleType {
+  Non = 0 ;
+  Speed = 1;
+  Temperature = 2 ;
+}
+
+message MonitoringFraudDetectNotificationResponse {
+  FraudDetectedEvent event = 2;
+}
