@@ -1,6 +1,6 @@
 # Assignment 4
 
-[Download Assignment File](./assignment4.pdf)
+[Download Assignment File](https://github.com/shrif-web/assignment4-fall2021/raw/master/assignment4.pdf)
 
 ## [Api Document](./api-document)
 
